@@ -28,6 +28,7 @@ pip install torch transformers datasets llmcompressor
 ```
 
 ⚡ If you are using CUDA (GPU), make sure to install the GPU version of PyTorch:
+
 👉 [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
 
 
