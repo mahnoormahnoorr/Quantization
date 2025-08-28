@@ -45,12 +45,7 @@ The script will:
 
 - Load a model (meta-llama/Meta-Llama-3-8B-Instruct)
 - Apply AWQ quantization
-- Save the quantized model in a folder like:
-
-```bash
-Meta-Llama-3-8B-Instruct-awq-asym/
-```
-
+- Save the quantized model in a folder like: Meta-Llama-3-8B-Instruct-awq-asym/
 - You will also see sample generations printed in your terminal for verification.
 
   
