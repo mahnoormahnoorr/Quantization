@@ -27,9 +27,7 @@ The script needs PyTorch, Transformers, Datasets, and LLM Compressor.
 pip install torch transformers datasets llmcompressor
 ```
 
-⚡ If you are using CUDA (GPU), make sure to install the GPU version of PyTorch:
-
-👉 [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
+⚡ If you are using CUDA (GPU), make sure to install the GPU version of PyTorch: [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
 
 
 ## 4. Run the script
