@@ -25,7 +25,7 @@ pip install torch transformers datasets llmcompressor
 
 ## ▶️ Running the Scripts
 
-# 1. Run GPTQconfig.py
+## 1. Run GPTQconfig.py
 
 This script:
 - Loads the OPT-125M model.
@@ -45,7 +45,7 @@ Output includes:
 - Inference time comparison.
 - Model size (MB) before and after quantization.
 
-# 2. Run GPTQmodifier.py
+## 2. Run GPTQmodifier.py
 
 This script:
 - Loads the Meta-Llama-3-8B-Instruct model.
