@@ -28,7 +28,7 @@ pip install torch transformers datasets llmcompressor
 ## 1. Run GPTQconfig.py
 
 This script:
-- Loads the OPT-125M model.
+- Loads the OPT-125M model. You can load your own model that needs to be quantized. 
 - Applies 4-bit GPTQ quantization with calibration.
 - Saves the quantized model (opt-125m-gptq) and compares it to the full-precision model.
 - Measures inference speed and disk size.
@@ -48,8 +48,8 @@ Output includes:
 ## 2. Run GPTQmodifier.py
 
 This script:
-- Loads the Meta-Llama-3-8B-Instruct model.
-- Prepares a calibration dataset (HuggingFaceH4/ultrachat_200k).
+- Loads the Meta-Llama-3-8B-Instruct model. You can load your own model that needs to be quantized.
+- Prepares a calibration dataset (HuggingFaceH4/ultrachat_200k). You can load data from your own code.
 - Applies GPTQ quantization (4-bit, group size 128) using LLM Compressor.
 - Tests sample generation.
 - Saves the quantized model (Meta-Llama-3-8B-Instruct-W4A16-G128).
