@@ -6,7 +6,7 @@ It shows how to:
 # Running the BitsAndBytes Quantization Script
 
 ## 1. Clone or prepare your repository
-Make sure your code (e.g., `main.py`) is saved inside your project folder.
+Make sure your code (e.g., `bitsandbytes.py`) is saved inside your project folder.
 
 ## 2. Create and activate a Python environment (recommended)
 
