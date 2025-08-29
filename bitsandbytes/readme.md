@@ -21,12 +21,12 @@ source .venv/bin/activate   # for Linux/macOS
 
 ## 3. Install dependencies
 
-The script needs PyTorch, Transformers, Datasets, and LLM Compressor.
+The script needs Transformers, PyTorch, and accelerate. 
 
 ```bash
 pip install --upgrade pip
 pip install torch --index-url https://download.pytorch.org/whl/cu118  # pick cu118 or cu121 depending on your CUDA
-pip install "transformers>=4.41" "accelerate>=0.30" "bitsandbytes>=0.43.1"
+pip install "transformers>=4.41" "accelerate>=0.30" 
 ```
 
 ⚡ If you are using CUDA (GPU), make sure to install the GPU version of PyTorch: [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
