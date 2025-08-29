@@ -1,4 +1,4 @@
-# BitsAndBytes Quantization Demo (Transformers)
+# BitsAndBytes Quantization with Transformers
 
 This guide demonstrates **quantizing a Hugging Face Transformer model** (here: [`facebook/opt-125m`](https://huggingface.co/facebook/opt-125m)) using the [bitsandbytes](https://github.com/TimDettmers/bitsandbytes) 4-bit quantization API in the 🤗 `transformers` library.  
 It shows how to:
