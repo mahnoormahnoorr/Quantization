@@ -21,7 +21,7 @@ source .venv/bin/activate      # Linux/macOS
 # Install dependencies
 pip install torch datasets llmcompressor
 pip install optimum 
-pip install gptq —no-build-isolation 
+pip install gptqmodel —no-build-isolation 
 pip install --upgrade accelerate optimum transformers
 
 ```
