@@ -15,14 +15,13 @@ It is recommended to use a fresh Python environment.
 # (Optional) Create and activate a virtual environment
 python3 -m venv .venv
 source .venv/bin/activate      # Linux/macOS
-# OR
+# OR 
 .venv\Scripts\activate         # Windows PowerShell
 
 # Install dependencies
-pip install torch datasets llmcompressor
-pip install optimum 
-pip install gptqmodel —no-build-isolation 
-pip install --upgrade accelerate optimum transformers
+pip install --upgrade torch transformers datasets optimum accelerate
+pip install gptqmodel --no-build-isolation
+pip install llmcompressor # needed only for GPTQmodifier example
 
 ```
 
