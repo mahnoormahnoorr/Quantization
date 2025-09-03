@@ -7,6 +7,8 @@ from llmcompressor.modifiers.awq import AWQModifier
 import transformers
 import torch
 
+from llmcompressor.utils import dispatch_for_generation  # important for runtime hooks
+
 # Select model and load it.
 MODEL_ID = "meta-llama/Meta-Llama-3-8B-Instruct"
 
@@ -76,10 +78,6 @@ print("==========================================\n\n")
 SAVE_DIR = MODEL_ID.rstrip("/").split("/")[-1] + "-awq-asym"
 model.save_pretrained(SAVE_DIR, save_compressed=True)
 tokenizer.save_pretrained(SAVE_DIR)
-
-
-from transformers import AutoModelForCausalLM, AutoTokenizer
-from llmcompressor.utils import dispatch_for_generation  # important for runtime hooks
 
 SAVE_DIR = "Meta-Llama-3-8B-Instruct-awq-asym"  # your folder name
 
