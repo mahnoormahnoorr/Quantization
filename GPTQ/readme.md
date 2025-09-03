@@ -19,7 +19,10 @@ source .venv/bin/activate      # Linux/macOS
 .venv\Scripts\activate         # Windows PowerShell
 
 # Install dependencies
-pip install torch transformers datasets llmcompressor
+pip install torch datasets llmcompressor
+pip install optimum 
+pip install gptq —no-build-isolation 
+pip install --upgrade accelerate optimum transformers
 
 ```
 
