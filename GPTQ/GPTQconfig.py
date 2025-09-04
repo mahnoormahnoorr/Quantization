@@ -8,8 +8,6 @@ from transformers import (
     pipeline,
 )
 
-device = "cuda" if torch.cuda.is_available() else "cpu"
-
 # Load base model and run initial inference
 model_name = "facebook/opt-125m"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
@@ -39,7 +37,7 @@ quantized_model = AutoModelForCausalLM.from_pretrained(
     quantization_config=gptq_config,
     device_map="auto")
 
-save_dir_quant = "opt-125m-gptq"
+save_dir_quant = model_name.split("/")[-1] + "-gptq-config"
 # Move model to a CPU for saving
 quantized_model.to("cpu")
 quantized_model.save_pretrained(save_dir_quant, safe_serialization=True)
