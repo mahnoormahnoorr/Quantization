@@ -5,8 +5,8 @@ This repository contains two practical examples of applying **quantization** to 
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
 Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models if you have the resources.
 
-1. **`GPTQconfig.py`** — Uses Hugging Face `transformers` and `GPTQConfig` to quantize the **OPT-125M** model. It compares inference time and model size before and after quantization.  
-2. **`GPTQmodifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. It performs calibration on a dataset, runs inference, and saves the quantized model.
+1. **`GPTQconfig.py`** — Uses Hugging Face `transformers` and `GPTQConfig` to quantize the **OPT-125M** model.
+2. **`GPTQmodifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
 
 ---
 
