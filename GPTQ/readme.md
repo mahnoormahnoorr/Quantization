@@ -43,7 +43,7 @@ pip install llmcompressor
 - Device placement is handled automatically via `device_map="auto"` (works on single GPU, multi-GPU, or CPU fallback).
 
 ## `GPTQModifier.py`
-- Uses [LLM Compressor](https://github.com/neuralmagic/llm-compressor) with a `GPTQModifier` recipe.
+- Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a `GPTQModifier` recipe.
 - Runs explicit **calibration** on a subset of the [Ultrachat-200k](https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k) dataset.
 - Saves both the full-precision and quantized models.
 - Compares outputs, inference latency, and model size.
