@@ -1,7 +1,5 @@
 # Quantization Examples with Transformers & LLM Compressor
 
-This repository contains two practical examples of applying **quantization** to large language models (LLMs):
-
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
 Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models if you have the resources.
 
