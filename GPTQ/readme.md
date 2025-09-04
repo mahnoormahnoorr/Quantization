@@ -31,9 +31,9 @@ Install GPTQmodel for GPTQconfig example
 pip install gptqmodel --no-build-isolation
 ```
 
-Install LLMCompressor for GPTQmodifier example
+Install LLM Compressor for GPTQmodifier example
 ```bash
-pip install llmcompressor # needed only for GPTQmodifier example
+pip install llmcompressor
 ```
 
 ## `GPTQConfig.py`
