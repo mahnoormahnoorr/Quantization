@@ -3,7 +3,7 @@
 This repository contains two practical examples of applying **quantization** to large language models (LLMs):
 
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
-Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models (e.g. OPT-6.7B, LLaMA-3-8B) if you have the hardware.
+Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models if you have the resources.
 
 1. **`GPTQconfig.py`** — Uses Hugging Face `transformers` and `GPTQConfig` to quantize the **OPT-125M** model. It compares inference time and model size before and after quantization.  
 2. **`GPTQmodifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. It performs calibration on a dataset, runs inference, and saves the quantized model.
@@ -48,6 +48,11 @@ pip install llmcompressor
 - Saves both the full-precision and quantized models.
 - Compares outputs, inference latency, and model size.
 - Provides finer control over quantization schemes (e.g. `W4A16`, `ignore=["lm_head"]`).
+
+## 'Output Includes'
+- Generated text before and after quantization.
+- Inference time comparison.
+- Model size (MB) before and after quantization.
 
 ## Notes
 - The current scripts use **OPT-125M** for fast experimentation. Replace `model_name` with a larger model to test real-world efficiency gains.
