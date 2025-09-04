@@ -49,7 +49,7 @@ pip install llmcompressor
 - Compares outputs, inference latency, and model size.
 - Provides finer control over quantization schemes (e.g. `W4A16`, `ignore=["lm_head"]`).
 
-## 'Output Includes'
+## Output Includes
 - Generated text before and after quantization.
 - Inference time comparison.
 - Model size (MB) before and after quantization.
