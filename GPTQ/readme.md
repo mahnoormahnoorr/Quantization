@@ -36,9 +36,8 @@ pip install llmcompressor
 
 ## `GPTQConfig.py`
 - Uses Hugging Face 🤗 `transformers` with [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq).
-- Quantizes the model weights to 4-bit using a built-in calibration dataset (`c4`).
-- Compares **inference latency** and **model size** before and after quantization.
-- Device placement is handled automatically via `device_map="auto"` (works on single GPU, multi-GPU, or CPU fallback).
+- Saves both the full-precision and quantized models. 
+- Compares outputs, inference latency, and model size.
 
 ## `GPTQModifier.py`
 - Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a `GPTQModifier` recipe.
@@ -53,7 +52,7 @@ pip install llmcompressor
 - Model size (MB) before and after quantization.
 
 ## Notes
-- The current scripts use **OPT-125M** for fast experimentation. Replace `model_name` with a larger model to test real-world efficiency gains.
+- The current scripts use **OPT-125M** for fast experimentation. Replace `model_name` with a larger model to test real-world efficiency gains. In this case, you might want to disable saving the models.
 - For large models, prefer `device_map="auto"` to let 🤗 Accelerate handle placement across GPUs.
 - The `GPTQConfig` path is simpler and integrates directly with Hugging Face pipelines, while the `GPTQModifier` path gives you more flexibility for research and custom recipes.
 
