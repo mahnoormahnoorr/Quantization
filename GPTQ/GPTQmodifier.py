@@ -1,10 +1,10 @@
 import os
 import time
+import torch
 from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    GPTQConfig,
     pipeline,
 )
 from llmcompressor.entrypoints.oneshot import oneshot
@@ -18,7 +18,7 @@ num_calibration_samples = 512
 max_seq_length = 2048
 
 # Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 dispatch_for_generation(model)
 
@@ -32,7 +32,7 @@ initial_time = end - start
 
 # Save full model before quantization
 save_dir_full = model_name.split("/")[-1] + "-full"
-model.save_pretrained(save_dir_full)
+model.save_pretrained(save_dir_full, safe_serialization=True)
 tokenizer.save_pretrained(save_dir_full)
 
 # Load and preprocess dataset
@@ -72,11 +72,11 @@ oneshot(
 )
 
 # Save compressed model
-save_dir_quant = model_name + "-gptq-modifier"
-model.save_pretrained(save_dir_quant, save_compressed=True)
+save_dir_quant = model_name.split("/")[-1] + "-gptq-modifier"
+model.save_pretrained(save_dir_quant, save_compressed=True, safe_serialization=True)
 tokenizer.save_pretrained(save_dir_quant)
 
-# Example how to reload quantized model for inference
+# Reload quantized model for inference
 quant_model = AutoModelForCausalLM.from_pretrained(save_dir_quant, device_map="auto")
 quant_tokenizer = AutoTokenizer.from_pretrained(save_dir_quant)
 
