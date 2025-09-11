@@ -27,7 +27,7 @@ module load pytorch
 python3 -m venv --system-site-packages venv
 source venv/bin/activate
 ```
-### Install packages not currectly available in the module
+### Install packages
 ```bash
 pip install optimum
 # Install GPTQmodel for the GPTQconfig example
