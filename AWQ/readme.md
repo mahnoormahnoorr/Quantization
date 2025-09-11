@@ -1,52 +1,59 @@
 # AWQ Quantization with LLM Compressor
 
-This guide shows how to quantize a model using **Activation-Aware Weight Quantization (AWQ)** with the [LLM Compressor](https://github.com/vllm-project/llm-compressor) toolkit.  
-AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization.
+This example script shows how to quantize a model using **Activation-Aware Weight Quantization (AWQ)** with the [LLM Compressor](https://github.com/vllm-project/llm-compressor) toolkit.  
+AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization. In order to target weight and activation scaling locations within the model, the AWQModifier must be provided an AWQ mapping. The model used in the example already has these mappings provided, but in case the model you want to quantize does not, you need to add your own mappings via the mappings argument with instantiating the AWQModifier. You can check existing mappings (and contribute) [here](https://docs.vllm.ai/src/llmcompressor/modifiers/awq/mappings.py)
 
-# Running the AWQ Quantization Script
+## Installations
 
-## 1. Clone or prepare your repository
-Make sure your code (e.g., `main.py`) is saved inside your project folder.
+Note, these examples are written for LUMI. If you want to use Puhti or Mahti,
+make sure to change the module and request for resources in the approriate way for each environment.
 
-## 2. Create and activate a Python environment (recommended)
+The CSC preinstalled PyTorch module covers most of the libraries needed to run these examples
+(torch, transformers, datasets, accelerate). The rest can be installed on top of the module in a virtual environment.
 
+### Load the module
 ```bash
-# Create a new environment (optional, but recommended)
-python3 -m venv .venv
-source .venv/bin/activate   # for Linux/macOS
-# OR
-.venv\Scripts\activate      # for Windows PowerShell
-
+module purge
+module use /appl/local/csc/modulefiles
+module load pytorch
+```
+### Create and activate a virtual environment using system packages
+```bash
+python3 -m venv --system-site-packages venv
+source venv/bin/activate
+```
+### Install packages
+```bash
+pip install optimum llmcompressor
 ```
 
-## 3. Install dependencies
+## Usage
 
-The script needs PyTorch, Transformers, Datasets, and LLM Compressor.
-
+To run the example scripts, you can use a GPU interactively:
 ```bash
-pip install torch transformers datasets llmcompressor
+# Replace with your own project
+srun --account=project_xxxxxxxx --partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
+
+module purge
+module use /appl/local/csc/modulefiles
+module load pytorch
+
+python3 AWQmodifier.py
 ```
 
-⚡ If you are using CUDA (GPU), make sure to install the GPU version of PyTorch: [PyTorch Installation Guide](https://pytorch.org/get-started/locally/)
-
-
-## 4. Run the script
-
-Simply run your script with Python:
-
+You can also submit a batch job. If you're quantizing a larger model, a batch job is recommended:
 ```bash
-python main.py
+sbatch run_awq_modifier.sh
 ```
-
-
-## 5. Output
-
-The script will:
-
-- Load a model (meta-llama/Meta-Llama-3-8B-Instruct)
-- Apply AWQ quantization
-- Save the quantized model in a folder like: Meta-Llama-3-8B-Instruct-awq-asym/
-- You will also see sample generations printed in your terminal for verification.
-
+## ÁWQmodifier.py´
+- Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a `AWQModifier` recipe.
   
-✅ After this, you can reload your saved model (from Meta-Llama-3-8B-Instruct-awq-asym/) in any script using transformers.
+## Output Includes
+- Generated text before and after quantization.
+- Inference time comparison.
+- Model size (MB) before and after quantization.
+
+## Notes
+- The current scripts use **Falcon-RW-1B** for fast experimentation. You can replace `model_name` with a larger model. In this case, you might want to disable saving the models.
+- For large models, `device_map="auto"` lets 🤗 Accelerate handle placement across GPUs.
+- Feel free to experiment with different values for ´num_calibration_samples´ and ´max_seq_lenght'.
