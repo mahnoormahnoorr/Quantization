@@ -1,25 +1,31 @@
-from transformers import AutoTokenizer, AutoModelForCausalLM
-
-tokenizer = AutoTokenizer.from_pretrained("facebook/opt-125m")
-model = AutoModelForCausalLM.from_pretrained("facebook/opt-125m")
-
-from transformers import pipeline
-
-generator = pipeline("text-generation", model=model, tokenizer=tokenizer)
-output = generator("The future of AI is", max_new_tokens=50)
-print(output[0]["generated_text"])
-
-
+import os
 import time
+import torch
+from transformers import (
+    AutoTokenizer,
+    AutoModelForCausalLM,
+    GPTQConfig,
+    pipeline,
+)
+
+# Load base model and run initial inference
+model_name = "facebook/opt-125m"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
 start = time.time()
-output = pipe("The future of AI is", max_new_tokens=50)
+initial_output = pipe("The future of AI is", max_new_tokens=50)
 end = time.time()
+initial_time = end - start
 
-print("Inference time:", end - start, "seconds")
+# Save full model before quantization
+save_dir_full = model_name.split("/")[-1] + "-full"
+model.save_pretrained(save_dir_full, safe_serialization=True)
+tokenizer.save_pretrained(save_dir_full)
 
-from Transformers import BitsAndBytesConfig, AutoModelForCausalLM
-
+# Quantize the model with BitsandBytes
 bnb_config = BitsAndBytesConfig(
    load_in_4bit=True,
    bnb_4bit_quant_type="nf4",
@@ -28,52 +34,44 @@ bnb_config = BitsAndBytesConfig(
    bnb_4bit_quant_storage=torch.bfloat16,
 )
 
-from transformers import AutoModelForCausalLM
-
 quantized_model = AutoModelForCausalLM.from_pretrained(
-    "facebook/opt-125m",
-    device_map="auto",  # Automatically balances model across GPU/CPU
-    quantization_config=bnb_config
-)
+    model_name,
+    quantization_config=bnb_config,
+    device_map="auto")
 
-quantized_model.to("cpu")  # Move model to CPU before saving
-quantized_model.save_pretrained("opt-125m-bnb")
-tokenizer.save_pretrained("opt-125m-bnb")
+save_dir_quant = model_name.split("/")[-1] + "bnb_config"
+# Move model to a CPU for saving
+quantized_model.to("cpu")
+quantized_model.save_pretrained(save_dir_quant, safe_serialization=True)
 
-from transformers import pipeline
+tokenizer.save_pretrained(save_dir_quant)
 
-model = AutoModelForCausalLM.from_pretrained("opt-125m-bnb", device_map="auto")
-tokenizer = AutoTokenizer.from_pretrained("opt-125m-bnb")
+# Reload quantized model and test inference
+quant_model = AutoModelForCausalLM.from_pretrained(save_dir_quant, device_map="auto")
+quant_tokenizer = AutoTokenizer.from_pretrained(save_dir_quant)
 
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
-result = pipe("The future of AI is", max_new_tokens=50)
-print(result[0]["generated_text"])
-
-
-import time
+quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=tokenizer)
 
 start = time.time()
-output = pipe("The future of AI is", max_new_tokens=50)
+quant_output = quant_pipe("The future of AI is", max_new_tokens=50)
 end = time.time()
+quant_time = end - start
 
-print("Inference time:", end - start, "seconds")
-
-import os
-
-# Folder size in MB
+# Compare model sizes
 def get_folder_size(path):
     total = 0
-    for dirpath, dirnames, filenames in os.walk(path):
+    for dirpath, _, filenames in os.walk(path):
         for f in filenames:
             total += os.path.getsize(os.path.join(dirpath, f))
-    return total / (1024 * 1024)
+    return total / (1024 * 1024)  # MB
 
-print("Quantized size:", get_folder_size("opt-125m-bnb"), "MB")
+initial_size = get_folder_size(save_dir_full)
+quantized_size = get_folder_size(save_dir_quant)
 
-from transformers import AutoModelForCausalLM
-
-model = AutoModelForCausalLM.from_pretrained("facebook/opt-125m")
-model.save_pretrained("opt-125m-full")
-
-
-print("Original size:", get_folder_size("opt-125m-full"), "MB")
+# Print all results together
+print("Initial Output:", initial_output[0]["generated_text"])
+print("Initial inference time:", initial_time, "seconds")
+print("Quantized Output:", quant_output[0]["generated_text"])
+print("Quantized inference time:", quant_time, "seconds")
+print("Original model size:", initial_size, "MB")
+print("Quantized model size:", quantized_size, "MB")
