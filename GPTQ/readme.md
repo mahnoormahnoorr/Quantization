@@ -16,19 +16,19 @@ make sure to change the module and request for resources in the approriate way f
 The CSC preinstalled PyTorch module covers most of the libraries needed to run these examples
 (torch, transformers, datasets, accelerate). The rest can be installed on top of the module in a virtual environment.
 
-# Load the module
+### Load the module
 ```bash
 module purge
 module use /appl/local/csc/modulefiles
 module load pytorch
 ```
-# Create and activate a virtual environment using system packages
+### Create and activate a virtual environment using system packages
 ```bash
 python3 -m venv --system-site-packages venv
 # Activate the environment
 source venv/bin/activate
 ```
-# Install packages
+### Install packages
 ```bash
 # Install optimum
 pip install optimum
