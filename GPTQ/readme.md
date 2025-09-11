@@ -13,8 +13,8 @@ Both examples currently use the small **OPT-125M** model for demonstration, but 
 Note, these examples are written for LUMI. If you want to use Puhti or Mahti,
 make sure to change the module and request for resources in the approriate way for each environment.
 
-The CSC preinstalled PyTorch module covers most of the libraries needed to run the codes in this project
-(torch, transformers, datasets, optimum, accelerate) The rest can be installed on top of the module in a virtual environment.
+The CSC preinstalled PyTorch module covers most of the libraries needed to run these examples
+(torch, transformers, datasets, optimum, accelerate). The rest can be installed on top of the module in a virtual environment.
 
 ```bash
 # Load the module
