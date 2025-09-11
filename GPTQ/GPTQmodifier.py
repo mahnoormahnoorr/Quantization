@@ -14,8 +14,8 @@ from llmcompressor.utils import dispatch_for_generation
 model_name = "facebook/opt-125m"
 dataset_name = "HuggingFaceH4/ultrachat_200k"
 dataset_split = "train_sft"
-num_calibration_samples = 512
-max_seq_length = 2048
+num_calibration_samples = 256
+max_seq_length = 512
 
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(device_map="auto")
