@@ -25,12 +25,10 @@ module load pytorch
 ### Create and activate a virtual environment using system packages
 ```bash
 python3 -m venv --system-site-packages venv
-# Activate the environment
 source venv/bin/activate
 ```
-### Install packages
+### Install packages not currectly available in the module
 ```bash
-# Install optimum
 pip install optimum
 # Install GPTQmodel for the GPTQconfig example
 pip install gptqmodel –no-build-isolation
@@ -42,7 +40,7 @@ pip install llmcompressor
 To run the example scripts, you can use a GPU interactively:
 ```bash
 # Replace with your own project
-srun --account=project_xxxx--partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
+srun --account=project_xxxxxxxx --partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
 
 module purge
 module use /appl/local/csc/modulefiles
@@ -51,9 +49,9 @@ module load pytorch
 python3 GPTQmodifier.py
 ```
 
-You can also submit a batch job. If you're quantizing a larger model, which will take longer, a batch job is recommended:
+You can also submit a batch job. If you're quantizing a larger model, a batch job is recommended:
 ```bash
-sbatch run_gptq_modifier
+sbatch run_gptq_modifier.sh
 ```
 
 ## `GPTQConfig.py`
