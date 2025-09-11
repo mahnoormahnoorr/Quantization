@@ -1,7 +1,7 @@
 # AWQ Quantization with LLM Compressor
 
 This example script shows how to quantize a model using **Activation-Aware Weight Quantization (AWQ)** with the [LLM Compressor](https://github.com/vllm-project/llm-compressor) toolkit.  
-AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization. In order to target weight and activation scaling locations within the model, the AWQModifier must be provided an AWQ mapping. The model used in the example already has these mappings provided, but in case the model you want to quantize does not, you need to add your own mappings via the mappings argument with instantiating the AWQModifier. You can check existing mappings (and contribute) [here](https://docs.vllm.ai/src/llmcompressor/modifiers/awq/mappings.py)
+AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization. In order to target weight and activation scaling locations within the model, the AWQModifier must be provided an AWQ mapping. The model used in the example already has these mappings provided, but in case the model you want to quantize does not, you need to add your own mappings via the mappings argument with instantiating the AWQModifier. You can check existing mappings (and contribute your own) [here.](https://docs.vllm.ai/src/llmcompressor/modifiers/awq/mappings.py)
 
 ## Installations
 
