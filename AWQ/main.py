@@ -1,108 +1,111 @@
+import os
+import time
+import torch
 from datasets import load_dataset
-from transformers import AutoModelForCausalLM, AutoTokenizer
-
+from transformers import (
+    AutoTokenizer,
+    AutoModelForCausalLM,
+    pipeline,
+)
 from llmcompressor.entrypoints.oneshot import oneshot
 from llmcompressor.modifiers.awq import AWQModifier
-from llmcompressor.utils import dispatch_for_generation 
+from llmcompressor.utils import dispatch_for_generation
 
-import transformers
-import torch
+model_name = "tiiuae/falcon-rw-1b"
+dataset_name = "HuggingFaceH4/ultrachat_200k"
+dataset_split = "train_sft"
+num_calibration_samples = 256
+max_seq_length = 512
 
+# Load model and tokenizer
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+dispatch_for_generation(model)
 
+# Pipeline for initial inference
+pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
 
-# Select model and load it.
-MODEL_ID = "meta-llama/Meta-Llama-3-8B-Instruct"
+start = time.time()
+initial_output = pipe("The future of AI is", max_new_tokens=50)
+end = time.time()
+initial_time = end - start
 
-model = AutoModelForCausalLM.from_pretrained(MODEL_ID, torch_dtype="auto")
-tokenizer = AutoTokenizer.from_pretrained(MODEL_ID, trust_remote_code=True)
+# Save full model before quantization
+save_dir_full = model_name.split("/")[-1] + "-full"
+model.save_pretrained(save_dir_full, safe_serialization=True)
+tokenizer.save_pretrained(save_dir_full)
 
-# Select calibration dataset.
-DATASET_ID = "mit-han-lab/pile-val-backup"
-DATASET_SPLIT = "validation"
-
-# Select number of samples. 256 samples is a good place to start.
-# Increasing the number of samples can improve accuracy.
-NUM_CALIBRATION_SAMPLES = 256
-MAX_SEQUENCE_LENGTH = 512
-
-# Load dataset and preprocess.
-ds = load_dataset(DATASET_ID, split=f"{DATASET_SPLIT}[:{NUM_CALIBRATION_SAMPLES}]")
-ds = ds.shuffle(seed=42)
+# Load and preprocess dataset
+dataset = load_dataset(dataset_name, split=f"{dataset_split}[:{num_calibration_samples}]")
+dataset = dataset.shuffle(seed=42)
 
 def preprocess(example):
-    return {
-        "text": tokenizer.apply_chat_template(
-            [{"role": "user", "content": example["text"]}],
-            tokenize=False,
-        )
-    }
+    text = ""
+    for msg in example["messages"]:
+        role = msg.get("role", "user")
+        content = msg.get("content", "")
+        text += f"{role}: {content}\n"
+    return {"text": text}
 
+dataset = dataset.map(preprocess, batched=False)
 
-ds = ds.map(preprocess)
-
-
-# Tokenize inputs.
-def tokenize(sample):
+def tokenize_sample(sample):
     return tokenizer(
         sample["text"],
         padding=False,
-        max_length=MAX_SEQUENCE_LENGTH,
+        max_length=max_seq_length,
         truncation=True,
-        add_special_tokens=False,
+        add_special_tokens=False
     )
 
+dataset = dataset.map(tokenize_sample, remove_columns=dataset.column_names, batched=False)
 
-# Configure the quantization algorithm to run.
-recipe = [
-    AWQModifier(ignore=["lm_head"], scheme="W4A16_ASYM", targets=["Linear"]),
-]
+# Quantization setup
+recipe = AWQModifier(targets="Linear", scheme="W4A16", ignore=["lm_head"])
 
-# Apply algorithms.
 oneshot(
     model=model,
-    dataset=ds,
+    dataset=dataset,
     recipe=recipe,
-    max_seq_length=MAX_SEQUENCE_LENGTH,
-    num_calibration_samples=NUM_CALIBRATION_SAMPLES,
+    max_seq_length=max_seq_length,
+    num_calibration_samples=num_calibration_samples
 )
 
-# Confirm generations of the quantized model look sane.
-print("\n\n")
-print("========== SAMPLE GENERATION ==============")
-input_ids = tokenizer("Hello my name is", return_tensors="pt").input_ids.to("cuda")
-output = model.generate(input_ids, max_new_tokens=100)
-print(tokenizer.decode(output[0]))
-print("==========================================\n\n")
+# Save compressed model
+save_dir_quant = model_name.split("/")[-1] + "-awq"
+model.save_pretrained(save_dir_quant, safe_serialization=True)
+tokenizer.save_pretrained(save_dir_quant)
 
+# Reload quantized model for inference
+quant_model = AutoModelForCausalLM.from_pretrained(save_dir_quant, device_map="auto")
+quant_tokenizer = AutoTokenizer.from_pretrained(save_dir_quant)
 
- #Save to disk compressed.
-SAVE_DIR = MODEL_ID.rstrip("/").split("/")[-1] + "-awq-asym"
-model.save_pretrained(SAVE_DIR, save_compressed=True)
-tokenizer.save_pretrained(SAVE_DIR)
+dispatch_for_generation(quant_model)
+model.eval() 
 
+# Pipeline for quantized inference
+quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=quant_tokenizer)
 
+start = time.time()
+quant_output = quant_pipe("The future of AI is", max_new_tokens=50)
+end = time.time()
+quant_time = end - start
 
+# Compare model sizes
+def get_folder_size(path):
+    total = 0
+    for dirpath, _, filenames in os.walk(path):
+        for f in filenames:
+            total += os.path.getsize(os.path.join(dirpath, f))
+    return total / (1024 * 1024)  # MB
 
-SAVE_DIR = "Meta-Llama-3-8B-Instruct-awq-asym"  # your folder name
+initial_size = get_folder_size(save_dir_full)
+quantized_size = get_folder_size(save_dir_quant)
 
-tokenizer = AutoTokenizer.from_pretrained(SAVE_DIR)
-model = AutoModelForCausalLM.from_pretrained(
-    SAVE_DIR,
-    device_map="auto",        # put weights on available GPU(s)
-    torch_dtype="auto"        # match the saved dtype config
-)
-
-# For llmcompressor-quantized models, register runtime hooks:
-dispatch_for_generation(model)
-
-# quick test
-prompt = "Hello my name is"
-inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-out = model.generate(**inputs, max_new_tokens=100)
-print(tokenizer.decode(out[0], skip_special_tokens=True))
-
-from transformers import TextGenerationPipeline
-
-pipe = TextGenerationPipeline(model=model, tokenizer=tokenizer)
-print(pipe("Write a short poem about Helsinki:", max_new_tokens=80)[0]["generated_text"])
-
+# Print results
+print("Initial Output:", initial_output[0]["generated_text"])
+print("Initial inference time:", initial_time, "seconds")
+print("Quantized Output:", quant_output[0]["generated_text"])
+print("Quantized inference time:", quant_time, "seconds")
+print("Original model size:", initial_size, "MB")
+print("Quantized model size:", quantized_size, "MB")
