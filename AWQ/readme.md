@@ -45,8 +45,6 @@ You can also submit a batch job. If you're quantizing a larger model, a batch jo
 ```bash
 sbatch run_awq_modifier.sh
 ```
-## ÁWQmodifier.py´
-- Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a `AWQModifier` recipe.
   
 ## Output Includes
 - Generated text before and after quantization.
