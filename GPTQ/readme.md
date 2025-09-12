@@ -8,7 +8,7 @@ Both examples currently use the small **OPT-125M** model for demonstration, but 
 
 ---
 
-## 📦 Installation
+## Installations
 
 Note, these examples are written for LUMI. If you want to use Puhti or Mahti,
 make sure to change the module and request for resources in the approriate way for each environment.
