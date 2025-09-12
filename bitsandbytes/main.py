@@ -4,7 +4,7 @@ import torch
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    GPTQConfig,
+    BitsAndBytesConfig,
     pipeline,
 )
 
