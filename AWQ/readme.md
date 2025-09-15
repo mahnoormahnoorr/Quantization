@@ -1,7 +1,8 @@
 # AWQ Quantization with LLM Compressor
 
-This example script shows how to quantize a model using **Activation-Aware Weight Quantization (AWQ)** with the [LLM Compressor](https://github.com/vllm-project/llm-compressor) toolkit.  
-AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization. In order to target weight and activation scaling locations within the model, the AWQModifier must be provided an AWQ mapping. The model used in the example already has these mappings provided, but in case the model you want to quantize does not, you need to add your own mappings via the mappings argument with instantiating the AWQModifier. You can check existing mappings (and contribute your own) [here.](https://docs.vllm.ai/src/llmcompressor/modifiers/awq/mappings.py)
+This example script shows how to quantize a model using **Activation-Aware Weight Quantization (AWQ)** with the [LLM Compressor](https://github.com/vllm-project/llm-compressor) toolkit. AWQ protects ~1% of the most important weight channels to reduce quantization error and improve performance when compared to uniform quantization.
+
+In order to target weight and activation scaling locations within the model, the AWQModifier must be provided an AWQ mapping. The model used in the example already has these mappings provided, but in case the model you want to quantize does not, you need to add your own mappings via the mappings argument with instantiating the AWQModifier. You can check existing mappings (and contribute your own) [here.](https://docs.vllm.ai/src/llmcompressor/modifiers/awq/mappings.py)
 
 ## Installations
 
@@ -45,7 +46,13 @@ You can also submit a batch job. If you're quantizing a larger model, a batch jo
 ```bash
 sbatch run_awq_modifier.sh
 ```
-  
+
+The script will quantize the **Falcon-RW-1B** model using the following recipe:
+```bash
+recipe = AWQModifier(targets="Linear", scheme="W4A16", ignore=["lm_head"])
+```
+Meaning the script quantizes the model’s linear layers using a mixed-precision approach: weights are reduced to 4-bit while activations remain at 16-bit to retain higher accuracy. The lm_head layer (the model’s output projection) is excluded to preserve output quality.
+
 ## Output Includes
 - Generated text before and after quantization.
 - Inference time comparison.
@@ -54,4 +61,4 @@ sbatch run_awq_modifier.sh
 ## Notes
 - The current scripts use **Falcon-RW-1B** for fast experimentation. You can replace `model_name` with a larger model. In this case, you might want to disable saving the models.
 - For large models, `device_map="auto"` lets 🤗 Accelerate handle placement across GPUs.
-- Feel free to experiment with different values for ´num_calibration_samples´ and ´max_seq_lenght'.
+- Feel free to experiment with different values for ´num_calibration_samples´ and ´max_seq_lenght' and to modify the quantization recipe.
