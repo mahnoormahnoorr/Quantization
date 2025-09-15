@@ -50,7 +50,7 @@ tokenizer.save_pretrained(save_dir_quant)
 quant_model = AutoModelForCausalLM.from_pretrained(save_dir_quant, device_map="auto")
 quant_tokenizer = AutoTokenizer.from_pretrained(save_dir_quant)
 
-quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=tokenizer)
+quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=quant_tokenizer)
 
 start = time.time()
 quant_output = quant_pipe("The future of AI is", max_new_tokens=50)
