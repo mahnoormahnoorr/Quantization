@@ -61,4 +61,4 @@ Meaning the script quantizes the model’s linear layers using a mixed-precision
 ## Notes
 - The current scripts use **Falcon-RW-1B** for fast experimentation. You can replace `model_name` with a larger model. In this case, you might want to disable saving the models.
 - For large models, `device_map="auto"` lets 🤗 Accelerate handle placement across GPUs.
-- Feel free to experiment with different values for ´num_calibration_samples´ and ´max_seq_lenght' and to modify the quantization recipe.
+- Feel free to experiment with different values for `num_calibration_samples` and `max_seq_lenght and to modify the quantization recipe.
