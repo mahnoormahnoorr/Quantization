@@ -2,7 +2,7 @@
 
 This example demonstrates quantizing the **OPT-125M** model using the [bitsandbytes](https://github.com/TimDettmers/bitsandbytes) 4-bit quantization API in the 🤗 `transformers` library. Bitsandbytes uses runtime quantization, which compresses weights to 4-bit on-the-fly during inference to save memory, but these quantized weights cannot be saved to disk.
 
-## Getting Started
+## Running the script
 
 Note, these examples are written for LUMI. If you want to use Puhti or Mahti, make sure to change the module and request for resources in the approriate way for each environment. 
 
