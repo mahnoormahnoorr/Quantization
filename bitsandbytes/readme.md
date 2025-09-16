@@ -1,6 +1,6 @@
 # BitsAndBytes Quantization with Transformers
 
-This example demonstrates quantizing the **OPT-125M** model using the [bitsandbytes](https://github.com/TimDettmers/bitsandbytes) 4-bit quantization API in the 🤗 `transformers` library. Bitsandbytes uses runtime quantization, which compresses weights to 4-bit on-the-fly during inference to save memory, but these quantized weights cannot be saved to disk.
+This example demonstrates quantizing the **OPT-125M** model using the [bitsandbytes](https://github.com/TimDettmers/bitsandbytes) 4-bit quantization API in the 🤗 `transformers` library. Bitsandbytes uses runtime quantization, which compresses weights to 4-bit on-the-fly during inference to save memory, but these quantized weights cannot be saved to disk. This example quantizes to nf4, but bitansbytes also supports standard floating point 4-bit and 8-bit quantization.
 
 ## Running the script
 
