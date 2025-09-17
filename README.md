@@ -15,21 +15,20 @@ We provide examples and experiments for:
 ## 📖 What to Expect in This Repo
 
 1. **Implementation Examples**  
-   - Scripts for loading, quantizing, and saving models with each method.  
-   - Examples include small models (`facebook/opt-125m`) so you can try things quickly, and notes for scaling to larger models.
+   - Scripts for loading, quantizing, and saving models.  
+   - Examples include small models (for example; `facebook/opt-125m`) so you can try things quickly, and notes for scaling to larger models.
 
 2. **Benchmarks**  
    - Inference time comparisons before and after quantization.  
-   - Model size reduction (disk footprint in MB/GB).  
-   - VRAM usage snapshots where applicable.
+   - Model size reduction (disk footprint in MB).  
+
 
 3. **Guides & Utilities**  
-   - Helper functions for measuring folder size, timing inference, and testing outputs.  
-   - Notes on environment setup for GPU clusters (CUDA / PyTorch / bitsandbytes compatibility).
+   - Helper functions for measuring model size, timing inference, and testing the quantized model.  
+   - Notes on how to run the examples on Puhti, Mahti and LUMI.
 
-4. **Reproducibility**  
-   - Each script is self-contained and documented.  
-   - Expected output snippets are included in the `README` sections or script comments.
+
+ 
 
 ---
 
