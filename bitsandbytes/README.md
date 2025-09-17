@@ -4,7 +4,7 @@ This example demonstrates quantizing the **OPT-125M** model using the [bitsandby
 
 ## Running the script
 
-Note, these examples are written for LUMI. If you want to use Puhti or Mahti, make sure to change the module and request for resources in the approriate way for each environment. 
+
 
 All of the libraries needed to run this example (transformers, bitsandbytes, accelerate) are covered by the CSC preinstalled PyTorch module.
 
