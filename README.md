@@ -6,7 +6,7 @@ Quantization is a key technique for reducing model size and inference cost, enab
 
 We provide examples and experiments for:
 
-- **[BitsAndBytes (bnb)](https://github.com/mahnoormahnoorr/Quantization/tree/main/bitsandbytes)** – 8-bit / 4-bit quantization using the Hugging Face integration.
+- **[BitsAndBytes (bnb)](https://github.com/mahnoormahnoorr/Quantization/tree/main/bitsandbytes)** – nf4 quantization using the Hugging Face integration.
 - **[AWQ (Activation-aware Weight Quantization)](https://github.com/mahnoormahnoorr/Quantization/tree/main/AWQ)** – a method that preserves accuracy by considering activation statistics.
 - **[GPTQ (Gradient Post-training Quantization)](https://github.com/mahnoormahnoorr/Quantization/tree/main/GPTQ)** – post-training quantization optimized for autoregressive transformers.
 
