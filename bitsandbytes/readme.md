@@ -8,27 +8,27 @@ Note, these examples are written for LUMI. If you want to use Puhti or Mahti, ma
 
 All of the libraries needed to run this example (transformers, bitsandbytes, accelerate) are covered by the CSC preinstalled PyTorch module.
 
+Each script showing hot to quantize a model on CSC's supercomputers. 
 
+The script `bitsandbytesquantization.py` will quantize the OPT-125M model to nf4 or NormalFloat 4-bit, introduced to use with QLoRA technique, a parameter efficient fine-tuning technique. It can be used with QLoRA for fine-tuning, or without just for reducing model size. 
 
-To run the example scripts, you can use a GPU interactively:
-```bash
-# Replace with your own project
-srun --account=project_xxxxxxxx --partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
+The launch scripts are: 
 
-# Load the module
-module purge
-module use /appl/local/csc/modulefiles
-module load pytorch
+-- `run-bitsandbytesquantization-lumi.sh` - quantizes model on LUMI with 1 GPU 
+-- `run-bitsandbytesquantization-mahti.sh` - quantizes model on Mahti with 1 GPU
+-- `run-bitsandbytesquantization-puhti.sh` - quantizes model on Puhti with 1 GPU
 
-python3 bitsandbytes_quantization.py
-```
+**Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the propoer partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
 
-You can also submit a batch job. If you're quantizing a larger model, a batch job is recommended. Remember to change the project number and path.
+## Run examples 
+
+Run on LUMI with the specific model and quantizing it: 
 
 ```bash
 sbatch run_bitsandbytes_quantization.sh
 ```
-The script will quantize the OPT-125M model to nf4 or NormalFloat 4-bit, introduced to use with QLoRA technique, a parameter efficient fine-tuning technique. It can be used with QLoRA for fine-tuning, or without just for reducing model size.
+
+
 
 ## Output Includes
 
