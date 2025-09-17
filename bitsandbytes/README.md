@@ -14,9 +14,9 @@ The script `bitsandbytesquantization.py` will quantize the OPT-125M model to nf4
 
 The launch scripts are: 
 
--- `run-bitsandbytesquantization-lumi.sh` - quantizes model on LUMI with 1 GPU 
--- `run-bitsandbytesquantization-mahti.sh` - quantizes model on Mahti with 1 GPU
--- `run-bitsandbytesquantization-puhti.sh` - quantizes model on Puhti with 1 GPU
+- `run-bitsandbytesquantization-lumi.sh` - quantizes model on LUMI with 1 GPU 
+- `run-bitsandbytesquantization-mahti.sh` - quantizes model on Mahti with 1 GPU
+- `run-bitsandbytesquantization-puhti.sh` - quantizes model on Puhti with 1 GPU
 
 **Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the propoer partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
 
