@@ -12,13 +12,38 @@ from transformers import (
 model_name =  "facebook/opt-125m"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+prompt = "The future of AI is"
 
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
+def benchmark(model, tokenizer, prompt):
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
-start = time.time()
-initial_output = pipe("The future of AI is", max_new_tokens=50)
-end = time.time()
-initial_time = end - start
+    # Warm-up run (to remove cold start effects)
+    with torch.no_grad():
+        _ = model.generate(**inputs, max_new_tokens=50)
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    start = time.time()
+
+    with torch.no_grad():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=50
+            do_sample=True,
+            temperature=0.7,
+)
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    end = time.time()
+
+    elapsed_time = end - start
+    decoded_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+
+    return decoded_text, elapsed_time
+
+# Run benchmark on full model
+initial_output, initial_time = benchmark(model, tokenizer, prompt)
 
 # Quantize the model with BitsandBytes
 bnb_config = BitsAndBytesConfig(
@@ -36,15 +61,14 @@ quant_model = AutoModelForCausalLM.from_pretrained(
 
 quant_tokenizer = AutoTokenizer.from_pretrained(model_name)
 
-quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=quant_tokenizer)
+quant_output, quant_time = benchmark(quant_model, quant_tokenizer, prompt)
 
-start = time.time()
-quant_output = quant_pipe("The future of AI is", max_new_tokens=50)
-end = time.time()
-quant_time = end - start
+# Print results
+print("=== Full Model ===")
+print(f" Output: {initial_output}")
+print(f" Inference time: {initial_time:.4f} s")
 
-# Print all results together
-print("Initial Output:", initial_output[0]["generated_text"])
-print("Initial inference time:", initial_time, "seconds")
-print("Quantized Output:", quant_output[0]["generated_text"])
-print("Quantized inference time:", quant_time, "seconds")
+print("\n=== Quantized Model ===")
+print(f" Output: {quant_output}")
+print(f" Inference time: {quant_time:.4f} s")
+
