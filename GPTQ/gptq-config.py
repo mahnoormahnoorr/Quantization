@@ -26,7 +26,12 @@ def benchmark(model, tokenizer, prompt, max_new_tokens=50):
     start = time.time()
 
     with torch.no_grad():
-        output_ids = model.generate(**inputs, max_new_tokens=max_new_tokens)
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=50,
+            do_sample=True,
+            temperature=0.7,
+)
 
     if torch.cuda.is_available():
         torch.cuda.synchronize()
