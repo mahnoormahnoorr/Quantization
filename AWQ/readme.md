@@ -6,9 +6,6 @@ In order to target weight and activation scaling locations within the model, the
 
 ## Installations
 
-Note, these examples are written for LUMI. If you want to use Puhti or Mahti,
-make sure to change the module and request for resources in the approriate way for each environment.
-
 The CSC preinstalled PyTorch module covers most of the libraries needed to run these examples
 (torch, transformers, datasets, accelerate). The rest can be installed on top of the module in a virtual environment.
 
@@ -30,28 +27,17 @@ pip install optimum llmcompressor
 
 ## Usage
 
-To run the example scripts, you can use a GPU interactively:
+To run the example, choose the appropriate batch job script. For example for LUMI, you would run: 
 ```bash
-# Replace with your own project
-srun --account=project_xxxxxxxx --partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
-
-module purge
-module use /appl/local/csc/modulefiles
-module load pytorch
-
-python3 AWQmodifier.py
+sbatch run-awq-modifier-lumi.sh
 ```
-
-You can also submit a batch job. If you're quantizing a larger model, a batch job is recommended:
-```bash
-sbatch run_awq_modifier.sh
-```
+Note that you need to change the --account parameter to your own project code. You can also increase the memory, time and number of GPUs if you decide to run quantization on larger models. 
 
 The script will quantize the **Falcon-RW-1B** model using the following recipe:
 ```bash
 recipe = AWQModifier(targets="Linear", scheme="W4A16", ignore=["lm_head"])
 ```
-Meaning the script quantizes the model’s linear layers using a mixed-precision approach: weights are reduced to 4-bit while activations remain at 16-bit to retain higher accuracy. The lm_head layer (the model’s output projection) is excluded to preserve output quality.
+Meaning the script quantizes the model’s linear layers using a mixed-precision approach: weights are reduced to 4-bit while activations remain at 16-bit to retain higher accuracy. The lm_head layer (the model’s output projection) is excluded to preserve output quality. You can check the output in the output file.
 
 ## Output Includes
 - Generated text before and after quantization.
