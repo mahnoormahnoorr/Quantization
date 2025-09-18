@@ -16,6 +16,7 @@ dataset_name = "HuggingFaceH4/ultrachat_200k"
 dataset_split = "train_sft"
 num_calibration_samples = 256
 max_seq_length = 512
+prompt = "The future of AI is"
 
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(device_map="auto")
