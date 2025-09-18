@@ -23,11 +23,6 @@ model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 dispatch_for_generation(model)
 
-# Save full model before quantization
-save_dir_full = model_name.split("/")[-1] + "-full"
-model.save_pretrained(save_dir_full, safe_serialization=True)
-tokenizer.save_pretrained(save_dir_full)
-
 def benchmark(model, tokenizer, prompt):
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
@@ -59,9 +54,10 @@ def benchmark(model, tokenizer, prompt):
 # Run benchmark on full model
 initial_output, initial_time = benchmark(model, tokenizer, prompt)
 
-# Load and preprocess dataset
-dataset = load_dataset(dataset_name, split=f"{dataset_split}[:{num_calibration_samples}]")
-dataset = dataset.shuffle(seed=42)
+# Save full model before quantization
+save_dir_full = model_name.split("/")[-1] + "-full"
+model.save_pretrained(save_dir_full, safe_serialization=True)
+tokenizer.save_pretrained(save_dir_full)
 
 # Load and preprocess dataset
 dataset = load_dataset(dataset_name, split=f"{dataset_split}[:{num_calibration_samples}]")
