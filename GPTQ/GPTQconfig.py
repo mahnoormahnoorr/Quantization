@@ -12,6 +12,7 @@ from transformers import (
 model_name = "facebook/opt-125m"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
+prompt = "The future of AI is"
 
 def benchmark(model, tokenizer, prompt, max_new_tokens=50):
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
