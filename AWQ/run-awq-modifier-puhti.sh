@@ -1,5 +1,5 @@
 #!/bin/bash                                                                                                                   
-#SBATCH --account=dac                                                                                                         
+#SBATCH --account=xxxxxxxx                                                                                                         
 #SBATCH --partition=gputest                                                                                                   
 #SBATCH --ntasks=1                                                                                                            
 #SBATCH --cpus-per-task=6                                                                                                     
