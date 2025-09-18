@@ -19,7 +19,7 @@ def benchmark(model, tokenizer, prompt):
 
     # Warm-up run (to remove cold start effects)
     with torch.no_grad():
-        _ = model.generate(**inputs, max_new_tokens=50)
+        _ = model.generate(**inputs, max_new_tokens=5)
 
     if torch.cuda.is_available():
         torch.cuda.synchronize()
@@ -28,7 +28,7 @@ def benchmark(model, tokenizer, prompt):
     with torch.no_grad():
         output_ids = model.generate(
             **inputs,
-            max_new_tokens=50
+            max_new_tokens=50,
             do_sample=True,
             temperature=0.7,
 )
