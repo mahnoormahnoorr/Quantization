@@ -16,24 +16,52 @@ dataset_name = "HuggingFaceH4/ultrachat_200k"
 dataset_split = "train_sft"
 num_calibration_samples = 256
 max_seq_length = 512
+prompt = "The future of AI is"
 
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 dispatch_for_generation(model)
 
-# Pipeline for initial inference
-pipe = pipeline("text-generation", model=model, tokenizer=tokenizer)
-
-start = time.time()
-initial_output = pipe("The future of AI is", max_new_tokens=50)
-end = time.time()
-initial_time = end - start
-
 # Save full model before quantization
 save_dir_full = model_name.split("/")[-1] + "-full"
 model.save_pretrained(save_dir_full, safe_serialization=True)
 tokenizer.save_pretrained(save_dir_full)
+
+def benchmark(model, tokenizer, prompt):
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    # Warm-up run (to remove cold start effects)
+    with torch.no_grad():
+        _ = model.generate(**inputs, max_new_tokens=50)
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    start = time.time()
+
+    with torch.no_grad():
+        output_ids = model.generate(
+            **inputs,
+            max_new_tokens=50
+            do_sample=True,
+            temperature=0.7,
+)
+
+    if torch.cuda.is_available():
+        torch.cuda.synchronize()
+    end = time.time()
+
+    elapsed_time = end - start
+    decoded_text = tokenizer.decode(output_ids[0], skip_special_tokens=True)
+
+    return decoded_text, elapsed_time
+
+# Run benchmark on full model
+initial_output, initial_time = benchmark(model, tokenizer, prompt)
+
+# Load and preprocess dataset
+dataset = load_dataset(dataset_name, split=f"{dataset_split}[:{num_calibration_samples}]")
+dataset = dataset.shuffle(seed=42)
 
 # Load and preprocess dataset
 dataset = load_dataset(dataset_name, split=f"{dataset_split}[:{num_calibration_samples}]")
@@ -81,15 +109,8 @@ quant_model = AutoModelForCausalLM.from_pretrained(save_dir_quant, device_map="a
 quant_tokenizer = AutoTokenizer.from_pretrained(save_dir_quant)
 
 dispatch_for_generation(quant_model)
-model.eval() 
 
-# Pipeline for quantized inference
-quant_pipe = pipeline("text-generation", model=quant_model, tokenizer=quant_tokenizer)
-
-start = time.time()
-quant_output = quant_pipe("The future of AI is", max_new_tokens=50)
-end = time.time()
-quant_time = end - start
+quant_output, quant_time = benchmark(quant_model, quant_tokenizer, prompt)
 
 # Compare model sizes
 def get_folder_size(path):
@@ -100,12 +121,15 @@ def get_folder_size(path):
     return total / (1024 * 1024)  # MB
 
 initial_size = get_folder_size(save_dir_full)
-quantized_size = get_folder_size(save_dir_quant)
+quant_size = get_folder_size(save_dir_quant)
 
 # Print results
-print("Initial Output:", initial_output[0]["generated_text"])
-print("Initial inference time:", initial_time, "seconds")
-print("Quantized Output:", quant_output[0]["generated_text"])
-print("Quantized inference time:", quant_time, "seconds")
-print("Original model size:", initial_size, "MB")
-print("Quantized model size:", quantized_size, "MB")
+print("=== Full Model ===")
+print(f" Output: {initial_output}")
+print(f" Size: {initial_size:.2f} MB")
+print(f" Inference time: {initial_time:.4f} s")
+
+print("\n=== Quantized Model ===")
+print(f" Output: {quant_output}")
+print(f" Size: {quant_size:.2f} MB")
+print(f" Inference time: {quant_time:.4f} s")
