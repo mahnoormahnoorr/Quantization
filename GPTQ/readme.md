@@ -3,8 +3,8 @@
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
 Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models.
 
-1. **`gptq-config.py`** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
-2. **`gptq-modifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
+1. **`GPTQConfig`** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
+2. **`GPTQModifier`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
 
 ---
 
@@ -30,8 +30,8 @@ pip install optimum
 ```
 The GPTQmodel library is needed for the gptq-config example. To install it, you need to use a GPU interactively when installing, or set the following environment variable:
 
-For Puhti: `export TORCH_CUDA_ARCH_LIST="7.0"`
-For Mahti: `export TORCH_CUDA_ARCH_LIST="8.0"`
+- For Puhti:`export TORCH_CUDA_ARCH_LIST="7.0"`
+- For Mahti: `export TORCH_CUDA_ARCH_LIST="8.0"`
 
 Then install with: 
 ```bash
@@ -67,12 +67,12 @@ For example to run on LUMI, you would run the command:
 sbatch run-gptq-config-lumi.sh
 ```
 
-## `GPTQConfig.py`
+## `gptq-config.py`
 - Uses Hugging Face 🤗 `transformers` with [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq).
 - Saves both the full-precision and quantized models. 
 - Compares outputs, inference latency, and model size.
 
-## `GPTQModifier.py`
+## `gptq-modifier.py`
 - Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a `GPTQModifier` recipe.
 - Runs explicit **calibration** on a subset of the [Ultrachat-200k](https://huggingface.co/datasets/HuggingFaceH4/ultrachat_200k) dataset.
 - Saves both the full-precision and quantized models.
@@ -89,4 +89,4 @@ sbatch run-gptq-config-lumi.sh
 - The current scripts use **OPT-125M** for fast experimentation. You can replace `model_name` with a larger model. In this case, you might want to disable saving the models.
 - For large models, `device_map="auto"` lets 🤗 Accelerate handle placement across GPUs.
 - The `GPTQConfig` path is simpler and integrates directly with Hugging Face pipelines, while the `GPTQModifier` path gives you more flexibility for research and custom recipes.
-- Feel free to experiment with different values for ´num_calibration_samples´ and ´max_seq_lenght'.
+- Feel free to experiment with different values for `num_calibration_samples` and `max_seq_lenght`.
