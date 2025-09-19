@@ -27,11 +27,20 @@ pip install optimum llmcompressor
 
 ## Usage
 
-To run the example, choose the appropriate batch job script. For example for LUMI, you would run: 
+The launch scripts are: 
+
+- `run-awq-modifier-lumi.sh` - quantizes model on LUMI with 1 GPU 
+- `run-awq-modifier-mahti.sh` - quantizes model on Mahti with 1 GPU
+- `run-awq-modifier-puhti.sh` - quantizes model on Puhti with 1 GPU
+
+**Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the proper partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
+
+For example to run on LUMI, you would run the command: 
+
 ```bash
 sbatch run-awq-modifier-lumi.sh
 ```
-Note that you need to change the --account parameter to your own project code. You can also increase the memory, time and number of GPUs if you decide to run quantization on larger models. 
+You can also increase the memory, time and number of GPUs if you decide to run quantization on larger models. 
 
 The script will quantize the **Falcon-RW-1B** model using the following recipe:
 ```bash
