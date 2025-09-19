@@ -19,7 +19,7 @@ max_seq_length = 512
 prompt = "The future of AI is"
 
 # Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained(device_map="auto")
+model = AutoModelForCausalLM.from_pretrained(model_name, device_map="auto")
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 dispatch_for_generation(model)
 
