@@ -16,7 +16,7 @@ The launch scripts are:
 - `run-bnb-quantization-mahti.sh` - quantizes model on Mahti with 1 GPU
 - `run-bnb-quantization-puhti.sh` - quantizes model on Puhti with 1 GPU
 
-**Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the propoer partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
+**Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the proper partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
 
 For example to run on LUMI, you would run the command: 
 
