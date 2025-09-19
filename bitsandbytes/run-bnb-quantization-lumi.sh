@@ -8,7 +8,7 @@
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
 #SBATCH --output=slurm-%j.out
-#SBATCH --output=slurm-%j.err
+#SBATCH --error=slurm-%j.err
 
 # Load the module
 module purge
