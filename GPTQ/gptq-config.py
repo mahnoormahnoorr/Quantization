@@ -95,5 +95,5 @@ print(f"  Time: {initial_time:.4f} s")
 
 print("\n=== Quantized Model ===")
 print("Output:", quant_output)
-print(f"  Size: {quantized_size:.2f} MB")
+print(f"  Size: {quant_size:.2f} MB")
 print(f"  Time: {quant_time:.4f} s")
