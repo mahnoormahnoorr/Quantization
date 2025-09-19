@@ -3,8 +3,8 @@
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
 Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models.
 
-1. **`GPTQConfig`** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
-2. **`GPTQModifier`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
+1. **GPTQConfig** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
+2. **GPTQModifier** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
 
 ---
 
