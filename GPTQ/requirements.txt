@@ -1,3 +1,0 @@
-optimum
-gptq —no-build-isolation 
---upgrade accelerate optimum transformers
