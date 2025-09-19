@@ -27,10 +27,10 @@ sbatch run-bnb-quantization-lumi.sh
 ## Output Includes
 
 - Generated text before and after quantization.
-- Inference time comparison.
+- Inference time comparison. Note that the effect of quantization on inference might not be noticeable for smaller models.
 
 ## Notes
 
-- The current scripts use OPT-125M for fast experimentation. You can replace model_name with a larger model.
+- The current scripts use OPT-125M for fast experimentation. You can replace `model_name` with a larger model.
 - For large models, `device_map="auto"` lets 🤗 Accelerate handle placement across GPUs.
 - You can easily change the quantization datatype in the `BitsAndBytesConfig` inside the script.
