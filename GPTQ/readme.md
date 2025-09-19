@@ -28,7 +28,7 @@ source venv/bin/activate
 ```bash
 pip install optimum
 ```
-The GPTQmodel library is needed for the gptq-config example. To install it, you need to use a GPU interactively when installing, or set the following environment variable:
+The GPTQmodel library is needed for the gptq-config example. To install it on Puhti or Mahti, you need to use a GPU interactively when installing, or set the following environment variable:
 
 - For Puhti:`export TORCH_CUDA_ARCH_LIST="7.0"`
 - For Mahti: `export TORCH_CUDA_ARCH_LIST="8.0"`
