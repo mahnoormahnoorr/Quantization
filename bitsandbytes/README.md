@@ -8,7 +8,7 @@ All of the libraries needed to run this example (transformers, bitsandbytes, acc
 
 Each script showing how to quantize a model on CSC's supercomputers. 
 
-The script `bitsandbytesquantization.py` will quantize the OPT-125M model to nf4 or NormalFloat 4-bit, introduced to use with QLoRA technique, a parameter efficient fine-tuning technique. It can be used with QLoRA for fine-tuning, or without just for reducing model size. 
+The script `bnb-quantization.py` will quantize the OPT-125M model to nf4 or NormalFloat 4-bit, introduced to use with QLoRA technique, a parameter efficient fine-tuning technique. It can be used with QLoRA for fine-tuning, or without just for reducing model size. 
 
 The launch scripts are: 
 
