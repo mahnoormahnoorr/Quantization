@@ -89,11 +89,11 @@ quant_size = get_folder_size(save_dir_quant)
 
 # Print results
 print("=== Full Model ===")
-print("Output:", initial_output)
-print(f"  Size: {initial_size:.2f} MB")
-print(f"  Time: {initial_time:.4f} s")
+print(f" Output: {initial_output}")
+print(f" Size: {initial_size:.2f} MB")
+print(f" Inference time: {initial_time:.4f} s")
 
 print("\n=== Quantized Model ===")
-print("Output:", quant_output)
-print(f"  Size: {quant_size:.2f} MB")
-print(f"  Time: {quant_time:.4f} s")
+print(f" Output: {quant_output}")
+print(f" Size: {quant_size:.2f} MB")
+print(f" Inference time: {quant_time:.4f} s")
