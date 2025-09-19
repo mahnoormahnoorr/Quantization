@@ -3,15 +3,12 @@
 This repository contains two practical examples of applying GPTQ quantization to LLMs.  
 Both examples currently use the small **OPT-125M** model for demonstration, but the code is written so you can swap in larger models.
 
-1. **`GPTQconfig.py`** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
-2. **`GPTQmodifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
+1. **`gptq-config.py`** — Uses Hugging Face `transformers` and [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq) to quantize the **OPT-125M** model.
+2. **`gptq-modifier.py`** — Uses [LLM Compressor](https://github.com/vllm-project/llm-compressor) with a GPTQ recipe to quantize the **OPT-125M** model. 
 
 ---
 
 ## Installations
-
-Note, these examples are written for LUMI. If you want to use Puhti or Mahti,
-make sure to change the module and request for resources in the approriate way for each environment.
 
 The CSC preinstalled PyTorch module covers most of the libraries needed to run these examples
 (torch, transformers, datasets, accelerate). The rest can be installed on top of the module in a virtual environment.
@@ -30,28 +27,44 @@ source venv/bin/activate
 ### Install packages
 ```bash
 pip install optimum
-# Install GPTQmodel for the GPTQconfig example
-pip install gptqmodel –no-build-isolation
-# Install LLM Compressor for the GPTQmodifier example
+```
+The GPTQmodel library is needed for the gptq-config example. To install it, you need to use a GPU interactively when installing, or set the following environment variable:
+
+For Puhti: `export TORCH_CUDA_ARCH_LIST="7.0"`
+For Mahti: `export TORCH_CUDA_ARCH_LIST="8.0"`
+
+Then install with: 
+```bash
+pip install gptqmodel==4.0.0 --no-build-isolation
+```
+
+This version of gptqmodel has been tested with the PyTorch 2.7 module.
+
+For the gptq-modifier example, you need to install the llmcompressor library.
+
+```bash
 pip install llmcompressor
 ```
 ## Usage
 
-To run the example scripts, you can use a GPU interactively:
+The launch scripts for gptq-config are: 
+
+- `run-gptq-config-lumi.sh` - quantizes model on LUMI with 1 GPU 
+- `run-gptq-config-mahti.sh` - quantizes model on Mahti with 1 GPU
+- `run-gptq-config-puhti.sh` - quantizes model on Puhti with 1 GPU
+
+Similarly, for gptq-modifier:
+
+- `run-gptq-modifier-lumi.sh` - quantizes model on LUMI with 1 GPU 
+- `run-gptq-modifier-mahti.sh` - quantizes model on Mahti with 1 GPU
+- `run-gptq-modifier-puhti.sh` - quantizes model on Puhti with 1 GPU
+
+**Note:** the scripts are made to be run on `gputest` or `dev-g` partition with a 30 minutes time-limit. You have to select the propoer partition for longer jobs for your real runs. Additionally, change the `--account` parameter to your own project code. 
+
+For example to run on LUMI, you would run the command:
+
 ```bash
-# Replace with your own project
-srun --account=project_xxxxxxxx --partition=small-g --ntasks=1 --cpus-per-task=7 --gpus-per-node=1 --mem=16G --time=00:30:00 --nodes=1 --pty bash
-
-module purge
-module use /appl/local/csc/modulefiles
-module load pytorch
-
-python3 GPTQmodifier.py
-```
-
-You can also submit a batch job. If you're quantizing a larger model, a batch job is recommended:
-```bash
-sbatch run_gptq_modifier.sh
+sbatch run-gptq-config-lumi.sh
 ```
 
 ## `GPTQConfig.py`
@@ -68,8 +81,9 @@ sbatch run_gptq_modifier.sh
 
 ## Output Includes
 - Generated text before and after quantization.
-- Inference time comparison.
+- Inference time comparison. 
 - Model size (MB) before and after quantization.
+- Note that the effect of quantization on inference might not be noticeable for smaller models.
 
 ## Notes
 - The current scripts use **OPT-125M** for fast experimentation. You can replace `model_name` with a larger model. In this case, you might want to disable saving the models.
