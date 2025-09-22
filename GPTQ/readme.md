@@ -66,6 +66,7 @@ For example to run on LUMI, you would run the command:
 ```bash
 sbatch run-gptq-config-lumi.sh
 ```
+You can also increase the memory and number of GPUs if you decide to run quantization on larger models.
 
 ## `gptq-config.py`
 - Uses Hugging Face 🤗 `transformers` with [`GPTQConfig`](https://huggingface.co/docs/transformers/en/quantization/gptq).
