@@ -23,6 +23,7 @@ For example to run on LUMI, you would run the command:
 ```bash
 sbatch run-bnb-quantization-lumi.sh
 ```
+You can also increase the memory and number of GPUs if you decide to run quantization on larger models.
 
 ## Output Includes
 
