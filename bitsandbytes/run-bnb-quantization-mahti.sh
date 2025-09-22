@@ -20,4 +20,4 @@ module load pytorch
 export HF_HOME=/scratch/${SLURM_JOB_ACCOUNT}/${USER}/hf-cache
 mkdir -p $HF_HOME
 
-python3 bnb-quantization.py
+srun python3 bnb-quantization.py
