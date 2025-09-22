@@ -5,7 +5,6 @@ from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
     GPTQConfig,
-    pipeline,
 )
 
 # Load base model and run initial inference
