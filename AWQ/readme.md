@@ -50,7 +50,7 @@ Meaning the script quantizes the model’s linear layers using a mixed-precision
 
 ## Output Includes
 - Generated text before and after quantization.
-- Inference time comparison.
+- Inference time comparison. Note that the effect of quantization on inference might not be noticeable for smaller models.
 - Model size (MB) before and after quantization.
 
 ## Notes
