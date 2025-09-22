@@ -5,7 +5,6 @@ from datasets import load_dataset
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    pipeline,
 )
 from llmcompressor.entrypoints.oneshot import oneshot
 from llmcompressor.modifiers.quantization import GPTQModifier
