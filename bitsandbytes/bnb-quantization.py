@@ -4,8 +4,7 @@ import torch
 from transformers import (
     AutoTokenizer,
     AutoModelForCausalLM,
-    BitsAndBytesConfig,
-    pipeline,
+    BitsAndBytesConfig
 )
 
 # Load base model and run initial inference
