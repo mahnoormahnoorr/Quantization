@@ -15,6 +15,9 @@ module purge
 module use /appl/local/csc/modulefiles
 module load pytorch
 
+# Activate the virtual environment from your current directory or change to the appropriate path
+source venv/bin/activate
+
 # This will store all the Hugging Face cache such as downloaded models                                                        
 # and datasets in the project's scratch folder                                                                                
 export HF_HOME=/scratch/${SLURM_JOB_ACCOUNT}/${USER}/hf-cache
