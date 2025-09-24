@@ -26,8 +26,10 @@ source venv/bin/activate
 ```
 ### Install packages
 ```bash
-pip install optimum
+pip install optimum --cache-dir ./.pip-cache
 ```
+The flag --cache-dir points the pip cache to the current (scratch) folder instead of the default (home directory), to avoid filling up home directory quota. 
+
 The GPTQmodel library is needed for the gptq-config example. To install it on Puhti or Mahti, you need to use a GPU interactively when installing, or set the following environment variable:
 
 - For Puhti:`export TORCH_CUDA_ARCH_LIST="7.0"`
@@ -35,7 +37,7 @@ The GPTQmodel library is needed for the gptq-config example. To install it on Pu
 
 Then install with: 
 ```bash
-pip install gptqmodel==4.0.0 --no-build-isolation
+pip install gptqmodel==4.0.0 --no-build-isolation --cache-dir ./.pip-cache
 ```
 
 This version of gptqmodel has been tested with the PyTorch 2.7 module.
@@ -43,7 +45,7 @@ This version of gptqmodel has been tested with the PyTorch 2.7 module.
 For the gptq-modifier example, you need to install the llmcompressor library.
 
 ```bash
-pip install llmcompressor
+pip install llmcompressor --cache-dir ./.pip-cache
 ```
 ## Usage
 
