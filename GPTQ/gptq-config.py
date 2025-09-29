@@ -51,10 +51,13 @@ tokenizer.save_pretrained(save_dir_full)
 
 
 # Quantize the model with GPTQ
+# Optionally set 'model_seqlen' for models
+# where GPTQ cannot automatically infer the max sequence length
 gptq_config = GPTQConfig(
     bits=4,
     dataset="c4",       # Use a standard text dataset for calibration
     tokenizer=tokenizer
+  # model_seqlen (int, optional) — The maximum sequence length that the model can take.
 )
 
 quantized_model = AutoModelForCausalLM.from_pretrained(
