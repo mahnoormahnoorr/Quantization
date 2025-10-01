@@ -17,7 +17,7 @@ The CSC preinstalled PyTorch module covers most of the libraries needed to run t
 ```bash
 module purge
 module use /appl/local/csc/modulefiles
-module load pytorch
+module load pytorch/2.7
 ```
 ### Create and activate a virtual environment using system packages
 ```bash
@@ -30,7 +30,7 @@ pip install optimum --cache-dir ./.pip-cache
 ```
 The flag --cache-dir points the pip cache to the current (scratch) folder instead of the default (home directory), to avoid filling up home directory quota. 
 
-The GPTQmodel library is needed for the gptq-config example. To install it on Puhti or Mahti, you need to use a GPU interactively when installing, or set the following environment variable:
+The GPTQmodel library is needed for the **gptq-config** example. To install it on Puhti or Mahti, you need to use a GPU interactively when installing, or set the following environment variable:
 
 - For Puhti:`export TORCH_CUDA_ARCH_LIST="7.0"`
 - For Mahti: `export TORCH_CUDA_ARCH_LIST="8.0"`
@@ -42,7 +42,9 @@ pip install gptqmodel==4.0.0 --no-build-isolation --cache-dir ./.pip-cache
 
 This version of gptqmodel has been tested with the PyTorch 2.7 module.
 
-For the gptq-modifier example, you need to install the llmcompressor library.
+Note: When quantizing models that use Rotary Positional Embeddings (RoPE), such as LlaMA, you might encounter runtime errors related to rotary dimensions. The current fix is to downgrade transformers to version 4.51.3.
+
+For the **gptq-modifier** example, you need to install the llmcompressor library.
 
 ```bash
 pip install llmcompressor --cache-dir ./.pip-cache
