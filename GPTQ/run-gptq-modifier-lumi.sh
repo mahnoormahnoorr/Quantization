@@ -12,7 +12,7 @@
 # Load the module
 module purge
 module use /appl/local/csc/modulefiles
-module load pytorch
+module load pytorch/2.7
 
 # Activate the virtual environment from your current directory or change to the appropriate path
 source venv/bin/activate
