@@ -13,7 +13,7 @@ The CSC preinstalled PyTorch module covers most of the libraries needed to run t
 ```bash
 module purge
 module use /appl/local/csc/modulefiles
-module load pytorch
+module load pytorch/2.7
 ```
 ### Create and activate a virtual environment using system packages
 ```bash
